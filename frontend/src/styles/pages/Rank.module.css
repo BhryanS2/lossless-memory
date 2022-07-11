@@ -1,0 +1,28 @@
+.Container {
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid red;
+}
+
+.Container > section {
+  margin: 2.5rem auto;
+  border: 1px solid red;
+  max-width: 960px;
+}
+
+.Container table {
+  width: 100%;
+  border: 1px solid blue;
+}
+
+.Container table th {
+  /* width: 100%; */
+  text-align: center;
+  border: 1px solid blue;
+}
+
+.Container table td {
+  /* width: 100%; */
+  text-align: center;
+  border: 1px solid blue;
+}

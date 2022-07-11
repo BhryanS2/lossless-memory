@@ -1,0 +1,22 @@
+.ContainerLoad {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Load {
+  animation: is-rotating 1s infinite;
+  border: 6px solid var(--gray-line);
+  border-radius: 50%;
+  border-top-color: var(--blue);
+  height: 100px;
+  width: 100px;
+}
+
+@keyframes is-rotating {
+  to {
+    transform: rotate(1turn);
+  }
+}
