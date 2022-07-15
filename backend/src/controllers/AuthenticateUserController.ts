@@ -1,4 +1,5 @@
 import { AuthenticateUserService } from "../services/AuthenticateUserService";
+import { Request, Response } from "express";
 
 type AuthenticateUserSignup = {
   firstName: string;
@@ -11,10 +12,9 @@ type AuthenticateUserSignup = {
 };
 
 export class AuthenticateUserController {
-  async signup(req, res) {
+  async signup(req: Request, res: Response) {
     try {
-      const { firstName, lastName, email, password, birthday, CPF, image } =
-        req.body;
+      const { firstName, lastName, email, password, birthday, CPF } = req.body;
       if (!firstName || !lastName || !email || !password || !birthday || !CPF) {
         return res.status(400).send({
           message: "Dados inválidos",
@@ -34,7 +34,7 @@ export class AuthenticateUserController {
       return res.status(400).json({ error: error.message, success: false });
     }
   }
-  async login(req, res) {
+  async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
       if (!email || !password) {
@@ -52,7 +52,7 @@ export class AuthenticateUserController {
       return res.status(400).json({ error: error.message, success: false });
     }
   }
-  async validateToken(req, res) {
+  async validateToken(req: Request, res: Response) {
     try {
       const response = await AuthenticateUserService.validateToken(
         req.body.token

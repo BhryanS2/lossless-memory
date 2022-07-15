@@ -6,6 +6,9 @@ const router = Router();
 // router.post("/Message", new MessageController().handle);
 // router.get("/user/Messages", new MessageController().getMessages);
 router.post("/user/signup", new AuthenticateUserController().signup);
+// router.delete("/user/:id", );
+// router.get("/user/:id", );
+// router.put("/user/:id", );
 router.post("/user/login", new AuthenticateUserController().login);
 // router.post(
 // 	"/user/valdiateToken",

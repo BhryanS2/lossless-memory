@@ -1,6 +1,7 @@
 import { prisma } from "../prisma";
 import * as bcrypt from "bcrypt";
 import * as webToken from "jsonwebtoken";
+import { ValidateData } from "../utils/validate";
 
 type AuthenticateUserLogin = {
   email: string;
@@ -14,15 +15,47 @@ type AuthenticateUserSignup = {
   password: string;
   birthday: string;
   CPF: string;
-  image: string;
+  image: string | null;
 };
 
 export class AuthenticateUserService {
   static async signup(data: AuthenticateUserSignup) {
     const credentialsUser = prisma.credentials;
+    const validator = ValidateData;
 
-    if (!data.email || !data.password || !data.firstName || !data.lastName) {
-      throw new Error("Dados inválidos");
+    if (
+      !data.email ||
+      !data.password ||
+      !data.firstName ||
+      !data.lastName ||
+      !data.birthday ||
+      !data.CPF
+    ) {
+      throw new Error("Invalid data");
+    }
+
+    const errors = {
+      email: validator.Email.isValid(data.email),
+      password: validator.Password.isValid(data.password),
+      name: validator.Name.isValid({
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }),
+      birthday: validator.Birthday.isValid(data.birthday),
+      cpf: validator.Cpf.isValid(data.CPF),
+    };
+
+    const errorsMessages = {
+      email: validator.Email.getErrorMessage(),
+      password: validator.Password.getErrorsMessages(),
+      name: validator.Name.getErrorMessage(),
+      birthday: validator.Birthday.getErrorMessage(),
+      cpf: validator.Cpf.getErrorMessage(),
+    };
+    if (Object.values(errors).includes(false)) {
+      throw new Error(
+        errorsMessages[Object.keys(errors).find((key) => !errors[key])]
+      );
     }
 
     const userExists = await credentialsUser.findFirst({
@@ -32,7 +65,7 @@ export class AuthenticateUserService {
     });
 
     if (userExists) {
-      throw new Error("Usuário já existe");
+      throw new Error("User already exists");
     }
 
     // get id from credentials
@@ -43,16 +76,19 @@ export class AuthenticateUserService {
     const PasswordHash = await bcrypt.hash(data.password, salt);
 
     const AuthenticateUser = prisma.users;
+    const formatBirthday = new Date(data.birthday);
+    const formatBirthdayString = formatBirthday.toISOString();
+    const date = new Date();
 
     const user = await AuthenticateUser.create({
       data: {
         firstName: data.firstName,
         lastName: data.lastName,
-        birthday: data.birthday,
+        birthday: formatBirthdayString,
         CPF: data.CPF,
         image: data.image ? data.image : "",
-        createAt: new Date(),
-        updateAt: new Date(),
+        createAt: date,
+        updateAt: date,
         credentials: {
           create: {
             Email: data.email,
@@ -64,10 +100,8 @@ export class AuthenticateUserService {
           create: {
             experience: 0,
             userLevel: 1,
-            challengesCompleted: null,
           },
         },
-        challengesCompleted: null,
         userType: {
           connectOrCreate: {
             create: {
@@ -118,35 +152,14 @@ export class AuthenticateUserService {
       expiresIn: "1d",
     });
     return { user, token };
-    // const AuthenticateUser = prisma.credentials;
-    // const credentials = await AuthenticateUser.findUnique({
-    //   where: {
-    //     Email: data.email,
-    //   },
-    // });
-    // if (!credentials) {
-    //   throw new Error("Usuário não encontrado");
-    // }
-    // const PasswordMatched = await bcrypt.compare(
-    //   data.password,
-    //   credentials.Password
-    // );
-    // if (!PasswordMatched) {
-    //   throw new Error("Senha inválida");
-    // }
-    // const user = prisma.users.findFirst({
+    // const user = await users.findFirst({
     //   where: {
     //     credentials: {
-    //       id: credentials.id,
+    //       Email: data.email,
     //     },
     //   },
     // });
-    // const secret = process.env.JWT_SECRET;
-    // const token = webToken.sign({ userId: credentials.id }, secret, {
-    //   expiresIn: "1d",
-    // });
-    // delete user.credentials;
-    // return { user, token };
+    // return user;
   }
 
   static async validateToken(token: string) {

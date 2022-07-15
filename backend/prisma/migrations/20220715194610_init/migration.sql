@@ -1,7 +1,6 @@
 -- CreateTable
 CREATE TABLE "Credentials" (
     "id" INTEGER NOT NULL,
-    "UserId" INTEGER NOT NULL,
     "Email" TEXT NOT NULL,
     "Password" TEXT NOT NULL
 );
@@ -31,7 +30,8 @@ CREATE TABLE "users" (
     "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userTypeId" INTEGER NOT NULL,
-    CONSTRAINT "users_id_fkey" FOREIGN KEY ("id") REFERENCES "Credentials" ("UserId") ON DELETE RESTRICT ON UPDATE CASCADE,
+    "credentialsEmail" TEXT NOT NULL,
+    CONSTRAINT "users_credentialsEmail_fkey" FOREIGN KEY ("credentialsEmail") REFERENCES "Credentials" ("Email") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "users_userTypeId_fkey" FOREIGN KEY ("userTypeId") REFERENCES "UserType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "users_id_fkey" FOREIGN KEY ("id") REFERENCES "userProfile" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -40,10 +40,11 @@ CREATE TABLE "users" (
 CREATE TABLE "userProfile" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "userLevel" INTEGER NOT NULL,
-    "challengesCompleted" INTEGER NOT NULL,
     "experience" INTEGER NOT NULL,
     "challengesId" INTEGER,
-    CONSTRAINT "userProfile_challengesId_fkey" FOREIGN KEY ("challengesId") REFERENCES "challenges" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "challengesCompletedId" INTEGER,
+    CONSTRAINT "userProfile_challengesId_fkey" FOREIGN KEY ("challengesId") REFERENCES "challenges" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "userProfile_challengesCompletedId_fkey" FOREIGN KEY ("challengesCompletedId") REFERENCES "challengesCompleted" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -62,9 +63,6 @@ CREATE TABLE "challengesCompleted" (
     CONSTRAINT "challengesCompleted_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "challengesCompleted_challengesId_fkey" FOREIGN KEY ("challengesId") REFERENCES "challenges" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "Credentials_UserId_key" ON "Credentials"("UserId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Credentials_Email_key" ON "Credentials"("Email");
