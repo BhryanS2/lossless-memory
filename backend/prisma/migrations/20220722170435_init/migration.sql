@@ -1,11 +1,4 @@
 -- CreateTable
-CREATE TABLE "Credentials" (
-    "id" INTEGER NOT NULL,
-    "Email" TEXT NOT NULL,
-    "Password" TEXT NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "UserType" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "Type" TEXT NOT NULL
@@ -16,7 +9,7 @@ CREATE TABLE "UserLogs" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "UserId" INTEGER NOT NULL,
     "login" DATETIME NOT NULL,
-    "logout" DATETIME NOT NULL
+    "logout" DATETIME
 );
 
 -- CreateTable
@@ -30,8 +23,8 @@ CREATE TABLE "users" (
     "createAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userTypeId" INTEGER NOT NULL,
-    "credentialsEmail" TEXT NOT NULL,
-    CONSTRAINT "users_credentialsEmail_fkey" FOREIGN KEY ("credentialsEmail") REFERENCES "Credentials" ("Email") ON DELETE RESTRICT ON UPDATE CASCADE,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     CONSTRAINT "users_userTypeId_fkey" FOREIGN KEY ("userTypeId") REFERENCES "UserType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "users_id_fkey" FOREIGN KEY ("id") REFERENCES "userProfile" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -65,7 +58,7 @@ CREATE TABLE "challengesCompleted" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Credentials_Email_key" ON "Credentials"("Email");
+CREATE UNIQUE INDEX "UserLogs_UserId_key" ON "UserLogs"("UserId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserLogs_UserId_key" ON "UserLogs"("UserId");
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

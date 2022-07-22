@@ -10,13 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Credentials {
-  id       Int
-  Email    String  @unique
-  Password String
-  users    users[]
-}
-
 model UserType {
   id    Int     @id @default(autoincrement())
   Type  String
@@ -24,10 +17,10 @@ model UserType {
 }
 
 model UserLogs {
-  id     Int      @id @default(autoincrement())
-  UserId Int      @unique
+  id     Int       @id @default(autoincrement())
+  UserId Int       @unique
   login  DateTime
-  logout DateTime
+  logout DateTime?
 }
 
 model users {
@@ -40,11 +33,11 @@ model users {
   createAt            DateTime              @default(now())
   updateAt            DateTime              @default(now())
   userTypeId          Int
-  credentials         Credentials           @relation(fields: [credentialsEmail], references: [Email])
+  email               String                @unique
+  password            String
   userType            UserType              @relation(fields: [userTypeId], references: [id])
   userProfile         userProfile           @relation(fields: [id], references: [id])
   challengesCompleted challengesCompleted[]
-  credentialsEmail    String
 }
 
 model userProfile {
