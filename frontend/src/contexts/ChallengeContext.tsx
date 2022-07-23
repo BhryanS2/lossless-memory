@@ -1,9 +1,12 @@
 // neverstoplearning
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { LevelUpModal } from "../components/LevelUpModal";
 
 // cookies
 import Cookies from "js-cookie";
+
+import { useAuth } from "../hooks/useAuth";
+
+import { LevelUpModal } from "../components/LevelUpModal";
 
 // desafios
 import { challenges } from "./challenges";
@@ -44,6 +47,8 @@ export function ChallengesProvider({
   children,
   ...rest
 }: ChallengesProviderProps) {
+  const { user } = useAuth();
+  const name = user?.firstName;
   const [level, setLevel] = useState(rest.level ?? 1);
   const [currentExperience, setCurrentExperience] = useState(
     rest.currentExperience ?? 0
@@ -67,10 +72,10 @@ export function ChallengesProvider({
   }, []);
 
   useEffect(() => {
-    Cookies.set("level", String(level));
-    Cookies.set("currentExperience", String(currentExperience));
-    Cookies.set("challengeComplete", String(challengeComplete));
-  }, [level, currentExperience, challengeComplete]);
+    Cookies.set(`level.${name}`, String(level));
+    Cookies.set(`currentExperience.${name}`, String(currentExperience));
+    Cookies.set(`challengeComplete.${name}`, String(challengeComplete));
+  }, [level, currentExperience, challengeComplete, name]);
 
   function levelUp() {
     setLevel(level + 1);
@@ -112,11 +117,7 @@ export function ChallengesProvider({
     if (!activeChallenge) return;
     const { amount } = activeChallenge;
 
-    // console.log(activeChallenge)
-
     let finalExperience = currentExperience + amount;
-
-    // console.log(finalExperience)
 
     if (finalExperience >= experienceToNextLevel) {
       finalExperience -= experienceToNextLevel;

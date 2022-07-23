@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Cookies from "js-cookie";
 
+import { useAuth } from "../../hooks/useAuth";
+
 import Home from "../../pages/index";
 import { Rank } from "../../pages/Rank";
 
@@ -11,13 +13,12 @@ type HomeProps = {
 };
 
 export function AuthRoutes() {
-  // Cookies.set("level", String(level));
-  // Cookies.set("currentExperience", String(currentExperience));
-  // Cookies.set("challengeComplete", String(challengeComplete));
+  const { user } = useAuth();
+  const name = user?.firstName;
   const props: HomeProps = {
-    level: Number(Cookies.get("level")) ?? 0,
-    currentExperience: Number(Cookies.get("currentExperience")) ?? 0,
-    challengeComplete: Number(Cookies.get("challengeComplete")) ?? 0,
+    level: Number(Cookies.get(`level.${name}`) ?? "1"),
+    currentExperience: Number(Cookies.get(`currentExperience.${name}`) ?? "0"),
+    challengeComplete: Number(Cookies.get(`challengeComplete.${name}`) ?? "0"),
   };
 
   return (

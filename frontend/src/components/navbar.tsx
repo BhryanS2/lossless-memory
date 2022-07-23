@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from "react";
+import { Link } from "react-router-dom";
 
 import logoIcon from "../assets/icons/LogoIcon.svg";
 import homeActive from "../assets/icons/home-active.svg";
@@ -6,8 +7,9 @@ import home from "../assets/icons/home.svg";
 import rankActive from "../assets/icons/award-active.svg";
 import rank from "../assets/icons/award.svg";
 
+import { useAuth } from "../hooks/useAuth";
+
 import style from "../styles/components/Nav.module.css";
-import { Link } from "react-router-dom";
 
 type NavProps = {
   isHome: boolean;
@@ -20,7 +22,8 @@ export function Navbar({ isHome, isRank, children }: NavProps) {
   const activeHome = isHome;
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-  // console.log(isOpen);
+  const { SignOut } = useAuth();
+
   return (
     <React.Fragment>
       <div className={style.Body}>
@@ -63,7 +66,7 @@ export function Navbar({ isHome, isRank, children }: NavProps) {
             </div>
 
             <div>
-              <button>Sing out</button>
+              <button onClick={SignOut}>Sair</button>
             </div>
           </div>
 
