@@ -20,7 +20,7 @@ router.delete("/user", ensureAuthenticated, new DeleteController().handle);
 router.put("/user", ensureAuthenticated, new UpdateController().handle);
 
 router.delete("/delete", new DeleteManyDbController().clear);
-router.get("/admin", new Admin().handle);
+router.get("/users", new Admin().handle);
 
 router.get("/", (req, res) => {
   res.send("Hello World!");

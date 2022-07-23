@@ -6,7 +6,7 @@ export class Admin {
     try {
       const service = new AdminService();
       const response = await service.execute();
-      return res.json({ users: response, success: true });
+      return res.json({ message: response, success: true });
     } catch (error) {
       return res.status(400).json({ message: error.message, success: false });
     }
