@@ -25,22 +25,41 @@ export class LoginService {
       throw new Error("Invalid password");
     }
     const secret = process.env.JWT_SECRET;
-    const { password, ...rest } = user;
-    const dataToken = {
-      userId: user.id,
-      ...rest,
-    };
-    const token = sign({ ...dataToken }, secret, {
-      expiresIn: "1d",
-    });
+
+    const token = sign(
+      {
+        userId: user.id,
+      },
+      secret,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     // logs
     const userLogs = prisma.userLogs;
-    await userLogs.create({
+    const log = await userLogs.findUnique({
+      where: {
+        UserId: user.id,
+      },
+    });
+
+    if (!log) {
+      await userLogs.create({
+        data: {
+          UserId: user.id,
+          login: new Date(),
+          logout: null,
+        },
+      });
+    }
+
+    await userLogs.update({
+      where: {
+        UserId: user.id,
+      },
       data: {
         login: new Date(),
-        logout: null,
-        UserId: user.id,
       },
     });
 
