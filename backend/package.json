@@ -10,7 +10,8 @@
   "scripts": {
     "build": "prisma generate",
     "dev": "ts-node-dev --exit-child src/server.ts",
-    "start": "tsc & node dist/server.js",
+    "start": "node dist/server.js",
+    "buildStart": "tsc & node dist/server.js",
     "migrate": "prisma migrate dev",
     "start-and-teste": "npm run start && npm run teste",
     "autocannon": "autocannon -c 100 -d 10 localhost:8000/user/Messages --renderStatusCode",
