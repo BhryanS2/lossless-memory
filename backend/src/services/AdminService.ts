@@ -9,12 +9,52 @@ export class AdminService {
       return user;
     });
 
-    const userProfiles = await prisma.userProfile.findMany({});
+    // const userProfiles = await prisma.userProfile.findMany({});
+    // const challengesCompleted = await prisma.challengesCompleted.findMany({});
+    // const challenges = await prisma.challenges.findMany({});
+
+    // const userToProfile = users.map((user) => {
+    //   const userProfile = userProfiles.find((profile) => {
+    //     return profile.id === user.id;
+    //   });
+
+    //   const challengesCompletedByUser = challengesCompleted.filter(
+    //     (challenge) => {
+    //       return challenge.userId === user.id;
+    //     }
+    //   );
+
+    //   const challengesCompletedDetails = challenges.map((challenge) => {
+    //     const challenges = challengesCompletedByUser.filter(
+    //       (challengeCompleted) => {
+    //         return challengeCompleted.challengesId === challenge.id;
+    //       }
+    //     );
+    //     return challenges.length;
+    //   });
+
+    //   const challengesPromises =  prisma.challengesCompleted.findMany({
+    //     where: {
+    //       userId: user.id,
+    //     },
+    //   });
+
+    //   const challengesCompletedByUserPromise = Promise.all(challengesPromises).then(response => {
+    //     return response.length;
+    //   });
+
+    //   return {
+    //     ...user,
+    //     ...userProfile,
+    //     challengesCompleted: challengesCompletedDetails.length,
+    //     challengesCount: challengesCompletedByUserPromise.length,
+    //   };
+    // });
+    const profiles = await prisma.userProfile.findMany({});
     const challengesCompleted = await prisma.challengesCompleted.findMany({});
-    const challenges = await prisma.challenges.findMany({});
 
     const userToProfile = users.map((user) => {
-      const userProfile = userProfiles.find((profile) => {
+      const userProfile = profiles.find((profile) => {
         return profile.id === user.id;
       });
 
@@ -24,22 +64,13 @@ export class AdminService {
         }
       );
 
-      const challengesCompletedDetails = challenges.map((challenge) => {
-        const challenges = challengesCompletedByUser.filter(
-          (challengeCompleted) => {
-            return challengeCompleted.challengesId === challenge.id;
-          }
-        );
-        return challenges;
-      });
-
       return {
         ...user,
         ...userProfile,
-        challengesCompleted: challengesCompletedDetails,
+        challengesCompleted: challengesCompletedByUser.length,
       };
     });
-
+    // userToProfile
     return userToProfile;
   }
 }

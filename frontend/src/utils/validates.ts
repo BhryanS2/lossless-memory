@@ -94,7 +94,6 @@ export class Validate {
   }
 
   async CPF(CPF: string) {
-    // Reject common values.
     const REJECT_LIST = [
       "00000000000",
       "11111111111",

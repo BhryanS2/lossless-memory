@@ -28,4 +28,5 @@ span.currentExperience {
   position: absolute;
   top: 12px;
   transform: translateX(-50%);
+  z-index: 1;
 }

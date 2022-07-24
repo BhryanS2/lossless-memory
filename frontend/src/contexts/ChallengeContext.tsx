@@ -1,24 +1,23 @@
-// neverstoplearning
 import { createContext, ReactNode, useEffect, useState } from "react";
-
-// cookies
 import Cookies from "js-cookie";
-
-import { useAuth } from "../hooks/useAuth";
 
 import { LevelUpModal } from "../components/LevelUpModal";
 
-// desafios
+import { useAuth } from "../hooks/useAuth";
+import { challengeProps } from "../@types";
+
+import { getChallenge } from "../services/API/getChallenge";
+import { updateProfile } from "../services/API/updateProfile";
+
 import { challenges } from "./challenges";
 
-// dados do challenge (dos desafios)
 type Challenge = {
+  id: number;
   type: "body" | "eye";
   description: String;
   amount: number;
 };
 
-// tipo do value do ChallengesProviderProps
 type ChallengesContextData = {
   level: number;
   currentExperience: number;
@@ -32,7 +31,6 @@ type ChallengesContextData = {
   closeLevelUpModal: () => void;
 };
 
-// tipo do children
 type ChallengesProviderProps = {
   children: ReactNode;
   level: number;
@@ -40,7 +38,6 @@ type ChallengesProviderProps = {
   challengeComplete: number;
 };
 
-// esse context serve para um componente se comunicar com outro
 export const ChallengesContext = createContext({} as ChallengesContextData);
 
 export function ChallengesProvider({
@@ -48,6 +45,7 @@ export function ChallengesProvider({
   ...rest
 }: ChallengesProviderProps) {
   const { user } = useAuth();
+
   const name = user?.firstName;
   const [level, setLevel] = useState(rest.level ?? 1);
   const [currentExperience, setCurrentExperience] = useState(
@@ -60,15 +58,14 @@ export function ChallengesProvider({
   const [activeChallenge, setActiveChallenge] = useState<Challenge | null>(
     null
   );
-  // estado do modal
+
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
 
-  // calcular a experiência do usuário
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
 
-  // pedir para o usuário permitir notificação
   useEffect(() => {
     Notification.requestPermission();
+    getChallengeInApi();
   }, []);
 
   useEffect(() => {
@@ -77,21 +74,37 @@ export function ChallengesProvider({
     Cookies.set(`challengeComplete.${name}`, String(challengeComplete));
   }, [level, currentExperience, challengeComplete, name]);
 
+  useEffect(() => {
+    if (activeChallenge) {
+      updateProfile({
+        challengeCompletedId: activeChallenge?.id ? activeChallenge.id : 0,
+        experience: currentExperience,
+        userLevel: level,
+      });
+    }
+  }, [currentExperience, level, activeChallenge]);
+
   function levelUp() {
     setLevel(level + 1);
     setIsLevelUpModalOpen(true);
   }
 
-  // fechar modal
   function closeLevelUpModal() {
     setIsLevelUpModalOpen(false);
   }
 
-  // mostra um desafio aleatorio
   function startnewChallenge() {
-    const randomChallengeIndex = Math.floor(Math.random() * challenges.length);
-    const challenge = challenges[randomChallengeIndex];
+    const challengesString = localStorage.getItem("@lossless.Challenges");
+    let Challenges = challenges;
+    if (challengesString !== null) {
+      const challengesParsed = JSON.parse(challengesString) as challengeProps[];
+      Challenges = challengesParsed;
+    }
+
+    const randomChallengeIndex = Math.floor(Math.random() * Challenges.length);
+    const challenge = Challenges[randomChallengeIndex];
     const newActiveChallenge = {
+      id: challenge.id,
       type: challenge.type as "body" | "eye",
       description: challenge.description,
       amount: challenge.amount,
@@ -107,12 +120,10 @@ export function ChallengesProvider({
     }
   }
 
-  // zera o desafio
   function resetChallenge() {
     setActiveChallenge(null);
   }
 
-  // desafio completo
   function completeChallenge() {
     if (!activeChallenge) return;
     const { amount } = activeChallenge;
@@ -127,6 +138,14 @@ export function ChallengesProvider({
     setCurrentExperience(finalExperience);
     setActiveChallenge(null);
     setChallengeComplete(challengeComplete + 1);
+  }
+
+  async function getChallengeInApi() {
+    const response = await getChallenge();
+    if (!response.success) return;
+    const challenge = response.message as challengeProps[];
+
+    localStorage.setItem("@lossless.Challenges", JSON.stringify(challenge));
   }
 
   return (

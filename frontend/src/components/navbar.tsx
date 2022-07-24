@@ -18,7 +18,6 @@ type NavProps = {
 };
 
 export function Navbar({ isHome, isRank, children }: NavProps) {
-  // const activeAwerd = isRank;
   const activeHome = isHome;
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);

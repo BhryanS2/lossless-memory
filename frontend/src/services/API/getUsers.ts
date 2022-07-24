@@ -1,4 +1,3 @@
-// import { userProps, userToSend } from "../../@types";
 import { bodyResponseType } from "../../@types/API";
 import { BaseApi } from "./ConfigApi";
 
@@ -20,16 +19,10 @@ export interface user {
   email: string;
   userLevel: number;
   experience: number;
-  challengesId: null | number;
-  challengesCompletedId: null | number;
-  challengesCompleted: challenge[] | [];
-}
-
-interface challenge {
-  id: number;
-  type: "body" | "eye";
-  description: String;
-  amount: number;
+  challengesId: null;
+  challengesCompletedId: number;
+  challengesCompleted: number;
+  currentExperience: number;
 }
 
 export interface responseType extends response {

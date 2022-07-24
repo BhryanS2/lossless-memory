@@ -24,3 +24,22 @@ export interface userLoginresponseType extends bodyResponseType {
     user: userProps;
   };
 }
+
+export interface userProfileResponseProps extends bodyResponseType {
+  message: {
+    id: number;
+    userLevel: number;
+    experience: number;
+    challengesId: null | number;
+    challengesCompletedId: number;
+  };
+}
+
+export interface challengeReponseProps extends bodyResponseType {
+  message: {
+    id: number;
+    type: string;
+    description: string;
+    amount: number;
+  };
+}

@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import { useAuth } from "../../hooks/useAuth";
 
@@ -13,12 +13,12 @@ type HomeProps = {
 };
 
 export function AuthRoutes() {
-  const { user } = useAuth();
-  const name = user?.firstName;
+  const { profile } = useAuth();
+
   const props: HomeProps = {
-    level: Number(Cookies.get(`level.${name}`) ?? "1"),
-    currentExperience: Number(Cookies.get(`currentExperience.${name}`) ?? "0"),
-    challengeComplete: Number(Cookies.get(`challengeComplete.${name}`) ?? "0"),
+    level: profile?.userProfile.userLevel ?? 1,
+    currentExperience: profile?.userProfile.experience ?? 0,
+    challengeComplete: profile?.challengesCompleted ?? 0,
   };
 
   return (

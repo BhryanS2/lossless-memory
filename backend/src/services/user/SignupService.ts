@@ -87,7 +87,9 @@ export class SignupService {
         lastName: data.lastName,
         birthday: formatBirthdayString,
         CPF: data.CPF,
-        image: data.image ? data.image : "",
+        image: data.image
+          ? data.image
+          : "https://gravatar.com/avatar/placeholder?d=mp",
         createAt: date,
         updateAt: date,
         email: data.email,

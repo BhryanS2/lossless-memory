@@ -26,3 +26,21 @@ export type userProfile = {
   userId: number;
   challengesId: number;
 };
+
+export type userProfileType = {
+  challengesCompletedId: number;
+  challengesId: number;
+  experience: number;
+  userLevel: number;
+};
+
+export type challengesCompletedType = {
+  challengesId: number;
+  userId: number;
+};
+
+export type challengeType = {
+  amount: number;
+  description: string;
+  type: string;
+};

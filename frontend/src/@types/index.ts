@@ -24,3 +24,27 @@ export interface userProps {
   updateAt: Date;
   userTypeId: number;
 }
+
+export interface userProfileProps {
+  challengeCompletedId: number;
+  experience: number;
+  userLevel: number;
+}
+
+export interface userProfileResponseProps {
+  challengesCompleted: number;
+  userProfile: {
+    id: number;
+    userLevel: number;
+    experience: number;
+    challengesId: number | null;
+    challengesCompletedId: number;
+  };
+}
+
+export interface challengeProps {
+  id: number;
+  type: string;
+  description: string;
+  amount: number;
+}

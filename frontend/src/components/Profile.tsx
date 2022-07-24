@@ -1,4 +1,3 @@
-// agora usamos o css module, ele funciona como um styleshhet em rect-native
 import { useContext } from "react";
 
 import { ChallengesContext } from "../contexts/ChallengeContext";

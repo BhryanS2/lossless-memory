@@ -2,16 +2,19 @@ import { useRef, useState } from "react";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 
+import { useAuth } from "../hooks/useAuth";
+
+import { Validate } from "../utils/validates";
+
+import { userToSend } from "../@types";
+
 import { Input, InputCpf } from "../components/form/input";
-// import github from "../assets/icons/Github.svg";
+
 import simbolo from "../assets/icons/Simbolo.svg";
 import logo from "../assets/icons/Logo.svg";
 
 import style from "../styles/components/formPages.module.css";
 import formStyle from "../styles/components/form/form.module.css";
-import { userToSend } from "../@types";
-import { Validate } from "../utils/validates";
-import { useAuth } from "../hooks/useAuth";
 
 interface FormProps extends userToSend {
   confirmPassword: string;
@@ -43,7 +46,6 @@ export function Signup() {
     } catch (error: any) {
       setErrorMessage("Usuário já existe");
     }
-    // await SignUp(data);
   }
   return (
     <section className={style.Container}>

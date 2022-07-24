@@ -56,6 +56,8 @@
   font-size: 1.25rem;
   font-weight: 600;
   transition: background-color 0.2s;
+
+  position: relative;
 }
 
 .countdownButton:not(:disabled):hover {
@@ -68,8 +70,10 @@
 }
 
 .countdownButtonActive:not(:disabled):hover {
-  background: var(--red);
-  color: var(--white);
+  /* background: var(--red);
+  color: var(--white); */
+  background-color: transparent;
+  content: var(--white);
 }
 
 .countdownButton:disabled {
@@ -81,4 +85,27 @@
 
 .countdownButton:disabled img {
   margin-left: 1.5rem;
+}
+
+.line {
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background: var(--red);
+  bottom: 0;
+  transition: all 0.2s;
+}
+
+.countdownButtonActive:not(:disabled):hover .line {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.countdownButtonActive p {
+  transition: all 0.3s;
+}
+.countdownButtonActive:not(:disabled):hover p {
+  color: var(--white);
+  position: absolute;
+  z-index: 2;
 }

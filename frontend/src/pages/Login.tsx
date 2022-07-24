@@ -1,18 +1,19 @@
 import { useRef, useState } from "react";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-
 import { Link } from "react-router-dom";
+
+import { useAuth } from "../hooks/useAuth";
+
 import { Input } from "../components/form/input";
 
-// import github from "../assets/icons/Github.svg";
+import { userToLogin } from "../@types";
+
 import simbolo from "../assets/icons/Simbolo.svg";
 import logo from "../assets/icons/Logo.svg";
 
 import style from "../styles/components/formPages.module.css";
 import stylesForm from "../styles/components/form/form.module.css";
-import { userToLogin } from "../@types";
-import { useAuth } from "../hooks/useAuth";
 
 interface handleSubimitProps extends userToLogin {
   ConfirmPassword: string;

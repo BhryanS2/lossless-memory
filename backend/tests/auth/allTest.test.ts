@@ -2,6 +2,8 @@ import { expect, test, describe } from "@jest/globals";
 
 import superTest, { Response } from "supertest";
 import { serverHttp } from "../../src/app";
+import { challengeType, userProfileType } from "../../src/types/auth";
+import { challenges } from "./challenges";
 import { userData } from "./user";
 
 // type user user
@@ -9,7 +11,7 @@ type userType = {
   CPF: string;
   birthday: string;
   createAt: string;
-  credentialsEmail: string;
+  email: string;
   firstName: string;
   id: number;
   image: string;
@@ -27,7 +29,7 @@ type userLoginType = {
     CPF: string;
     birthday: Date;
     createAt: Date;
-    credentialsEmail: string;
+    email: string;
     image: string;
     updateAt: Date;
     userTypeId: number;
@@ -49,7 +51,7 @@ describe("API E2E Test Suite", () => {
       CPF: userData.CPF,
       // birthday: userData.birthday,
       userTypeId: 1,
-      credentialsEmail: userData.email,
+      email: userData.email,
     },
     success: true,
   };
@@ -76,7 +78,7 @@ describe("API E2E Test Suite", () => {
 
     const response = await serverTest.post(url).send(userData);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
 
     const body = response.body as bodyResponseType;
 
@@ -109,7 +111,6 @@ describe("API E2E Test Suite", () => {
 
   test("POST / - should login", async () => {
     const response = await serverTest.post("/user/login").send(userData);
-    // expect(response.status).toBe(200);
     const body = response.body as bodyResponseType;
 
     expect(body).toMatchObject({
@@ -122,7 +123,7 @@ describe("API E2E Test Suite", () => {
           CPF: userData.CPF,
           birthday: expect.any(String),
           createAt: expect.any(String),
-          credentialsEmail: userData.email,
+          email: userData.email,
           image: userData.image,
           updateAt: expect.any(String),
           userTypeId: expect.any(Number),
@@ -143,5 +144,66 @@ describe("API E2E Test Suite", () => {
       success: true,
       message: "User logged out",
     });
+  });
+
+  const userProfile = {
+    idChallenge: 0,
+    userData: {
+      userLevel: 0,
+      experience: 0,
+      challengeCompletedId: 0,
+    },
+    setUserData(data: {
+      userLevel: number;
+      experience: number;
+      challengeCompletedId: number;
+    }) {
+      this.userData = data;
+    },
+  };
+
+  test("POST / - should register challenges", async () => {
+    const url = "/challenges";
+    const promises = challenges.map((challenge) => {
+      return serverTest.post(url).send(challenge);
+    });
+
+    const responses = await Promise.all(promises);
+    const datas = responses.map((response) => response.body);
+    userProfile.idChallenge = datas[0].message.id;
+    const challengesData = datas.map((data: bodyResponseType) => {
+      const { amount, id, type, description } = data.message;
+      return { amount, type, description };
+    });
+    expect(responses.length).toBe(challenges.length);
+    expect(challengesData).toMatchObject(challenges);
+  });
+
+  test("GET / - should get all challenges", async () => {
+    const url = "/challenges";
+    const response = await serverTest.get(url);
+    const data = response.body as bodyResponseType;
+
+    // const challengesData = data.message.map((data: challengeType) => {
+    //   const { amount, type, description } = data;
+    //   return { amount, type, description };
+    // });
+    expect(data.success).toBe(true);
+  });
+
+  test("UPDATE / - should update user profile", async () => {
+    const url = "/user/profile";
+    userProfile.setUserData({
+      challengeCompletedId: userProfile.idChallenge,
+      experience: 50,
+      userLevel: 2,
+    });
+    const response = await serverTest
+      .put(url)
+      .set("Authorization", `Bearer ${user.userData.token}`)
+      .send(userProfile.userData);
+    const data = response.body as bodyResponseType;
+    console.log(data);
+    expect(data.success).toBe(true);
   });
 });

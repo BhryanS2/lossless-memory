@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+
 import { ChallengesContext } from "./ChallengeContext";
 
 interface CountdownContextData {
@@ -12,11 +13,11 @@ interface CountdownContextData {
   seconds: number;
   hasFinished: boolean;
   isActive: boolean;
+  timeTotal: number;
   startCountdown: () => void;
   resetCountdown: () => void;
 }
 
-// tipo do children
 interface ChallengesProviderProps {
   children: ReactNode;
 }
@@ -25,13 +26,10 @@ export const CountdownContext = createContext({} as CountdownContextData);
 
 let countdownTimeout: NodeJS.Timeout;
 
-const timeToSet = 1;
+const timeToSet = 25 * 60;
 
 export function CountdownProvider({ children }: ChallengesProviderProps) {
-  // contexto
   const { startnewChallenge } = useContext(ChallengesContext);
-
-  // funcionamento do countdown
   const [time, setTime] = useState(timeToSet);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFineshed] = useState(false);
@@ -41,8 +39,6 @@ export function CountdownProvider({ children }: ChallengesProviderProps) {
 
   function startCountdown() {
     setIsActive(true);
-    //isactive ? setIsActive(false) : setIsActive(true)
-    // o useEffect funciona como quando mudar/acontecer eu quero executar uma function
   }
 
   function resetCountdown() {
@@ -52,7 +48,6 @@ export function CountdownProvider({ children }: ChallengesProviderProps) {
     setHasFineshed(false);
   }
 
-  // eu quero executar uma function quadno o valor de isactive mudar
   useEffect(() => {
     if (isActive && time > 0) {
       countdownTimeout = setTimeout(() => {
@@ -74,6 +69,7 @@ export function CountdownProvider({ children }: ChallengesProviderProps) {
         isActive,
         startCountdown,
         resetCountdown,
+        timeTotal: timeToSet,
       }}
     >
       {children}

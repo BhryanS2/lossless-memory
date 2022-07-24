@@ -1,4 +1,3 @@
-// style
 import { useContext } from "react";
 import { CountdownContext } from "../contexts/CountdownContext";
 
@@ -6,7 +5,6 @@ import finishCicle from "../assets/icons/FinishedCicle.svg";
 
 import styles from "../styles/components/Countdown.module.css";
 
-// jornada infinita
 export function Countdown() {
   const {
     hasFinished,
@@ -15,12 +13,12 @@ export function Countdown() {
     seconds,
     resetCountdown,
     startCountdown,
+    timeTotal,
   } = useContext(CountdownContext);
 
-  // O podStart serve para verificar se o número tem dois algarismo, se não tiver ele coloca um 0
   const [minuteLeft, minuteRight] = String(minutes).padStart(2, "0").split("");
   const [secondLeft, secondRight] = String(seconds).padStart(2, "0").split("");
-
+  const percentWidth = ((minutes * 60 + seconds) * 100) / timeTotal;
   return (
     <div>
       <div className={styles.countdownContainer}>
@@ -48,7 +46,13 @@ export function Countdown() {
               className={`${styles.countdownButton}  ${styles.countdownButtonActive}`}
               onClick={resetCountdown}
             >
-              Abandonar ciclo
+              <p>Abandonar ciclo</p>
+              <div
+                className={styles.line}
+                style={{
+                  width: percentWidth + "%",
+                }}
+              ></div>
             </button>
           ) : (
             <button

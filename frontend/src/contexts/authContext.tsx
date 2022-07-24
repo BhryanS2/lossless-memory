@@ -1,9 +1,16 @@
 import { ReactNode, useEffect, useState, createContext } from "react";
-import { userProps, userToLogin, userToSend } from "../@types";
+
 import { BaseApi } from "../services/API/ConfigApi";
-// import and rename methods from BaseApi
 import { SignIn as SignInApi } from "../services/API/SignIn";
 import { SignUp as SignUpAPi } from "../services/API/SignUp";
+import { getProfileApi } from "../services/API/getProfile";
+
+import {
+  userProps,
+  userToLogin,
+  userToSend,
+  userProfileResponseProps,
+} from "../@types";
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -12,6 +19,7 @@ type AuthProviderProps = {
 type AuthContextData = {
   isAuthenticated: boolean;
   user: userProps | null;
+  profile: userProfileResponseProps | null;
   loading: boolean;
   SignIn(data: userToLogin): Promise<void>;
   SignOut(): void;
@@ -21,12 +29,14 @@ const AuthContext = createContext({} as AuthContextData);
 
 export function AuthContextProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<userProps | null>(null);
+  const [profile, setProfile] = useState<userProfileResponseProps | null>(null);
   const [isLoad, setIsLoad] = useState(true);
 
   function SignOut() {
     localStorage.removeItem("@lossless.Token");
     localStorage.removeItem("@lossless.Timelimt");
     localStorage.removeItem("@lossless.User");
+    localStorage.removeItem("@lossless.Profile");
     setUser(null);
     if (
       window.location.pathname !== "/" &&
@@ -41,8 +51,9 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       const timeLimit = localStorage.getItem("@lossless.Timelimt");
       const user = localStorage.getItem("@lossless.User");
       const token = localStorage.getItem("@lossless.Token");
+      const profile = localStorage.getItem("@lossless.Profile");
 
-      if (!timeLimit || !token || !user) {
+      if (!timeLimit || !token || !user || !profile) {
         SignOut();
         return;
       }
@@ -56,6 +67,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
       const userParsed = JSON.parse(user);
       setUser(userParsed);
+      setProfile(JSON.parse(profile));
       setIsLoad(false);
     })();
   }, []);
@@ -66,6 +78,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     if (!json.success) return Promise.reject(json.message);
     const { token, user } = json.message;
     BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+    await getProfile();
 
     localStorage.setItem("@lossless.User", JSON.stringify(user));
     localStorage.setItem("@lossless.Token", token);
@@ -74,9 +87,10 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     const time = new Date(now.getTime() + oneDayTime);
     localStorage.setItem("@lossless.Timelimt", time.toISOString());
     setUser(user);
+
     setIsLoad(false);
     const url = window.location.href;
-    if (url.includes("/login") || url.includes("/signup")) {
+    if (url.includes("/signup")) {
       window.history.replaceState({}, "", "/");
       window.location.reload();
     }
@@ -93,6 +107,15 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     setIsLoad(false);
   }
 
+  async function getProfile() {
+    setIsLoad(true);
+    const response = await getProfileApi();
+    if (!response.success) return Promise.reject(response.message);
+    const profile = response.message as userProfileResponseProps;
+    localStorage.setItem("@lossless.Profile", JSON.stringify(profile));
+    setProfile(profile);
+    setIsLoad(false);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -100,6 +123,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         SignIn,
         SignOut,
         SignUp,
+        profile,
         user,
         loading: isLoad,
       }}

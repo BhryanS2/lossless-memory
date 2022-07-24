@@ -9,6 +9,7 @@
   width: 8rem;
   background: var(--white);
   transition: 5s ease-in-out;
+  z-index: 5;
 }
 
 /* Global formatation */
