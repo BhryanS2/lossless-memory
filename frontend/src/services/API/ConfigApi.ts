@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BaseURL = "http://localhost:8000";
+const BaseURL = "https://lossless-memory.herokuapp.com/";
 
 export const BaseApi = axios.create({
   baseURL: BaseURL,
