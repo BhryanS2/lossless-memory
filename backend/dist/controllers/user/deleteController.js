@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteController = void 0;
-const DeleteService_1 = require("../../services/user/DeleteService");
+const deleteService_1 = require("../../services/user/deleteService");
 class DeleteController {
     async handle(request, response) {
         const { userId } = request;
-        const service = new DeleteService_1.DeleteService();
+        const service = new deleteService_1.DeleteService();
         try {
             await service.execute(Number(userId));
             response.status(204).json({

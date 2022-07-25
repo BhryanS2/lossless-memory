@@ -17,6 +17,7 @@ type HomeProps = {
 };
 
 export default function Home(props: HomeProps) {
+  document.title = "Home | lossless";
   return (
     <Navbar isHome isRank={false}>
       <ChallengesProvider

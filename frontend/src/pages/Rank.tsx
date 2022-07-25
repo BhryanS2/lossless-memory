@@ -23,6 +23,7 @@ export function Rank() {
   }
 
   useMemo(() => {
+    document.title = "Rank | lossless";
     (async () => {
       const users = await getUsers();
       if (!users.message) return;
@@ -30,6 +31,16 @@ export function Rank() {
       setIsLoading(false);
     })();
   }, []);
+
+  function getTotalExperience(user: user) {
+    let totalExperience = 0;
+    for (let i = 1; i < user.userLevel; i++) {
+      const userExperience = Math.pow((i + 1) * 4, 2);
+      totalExperience += userExperience;
+    }
+    totalExperience = Math.round(totalExperience - user.experience);
+    return totalExperience;
+  }
 
   if (isLoading || !users) {
     return <div>Loading...</div>;
@@ -42,47 +53,47 @@ export function Rank() {
           <strong>Leaderboard</strong>
 
           <section className={styles.info}>
-            <p>POSIÇÃO</p>
-            <p>USUÁRIO</p>
-            <p>DESAFIOS</p>
-            <p>EXPERIÊNCIA</p>
+            <p className={styles.infoPosition}>POSIÇÃO</p>
+            <p className={styles.infoUser}>USUÁRIO</p>
+            <p className={styles.infoChallenge}>DESAFIOS</p>
+            <p className={styles.infoExperience}>EXPERIÊNCIA</p>
           </section>
 
           {users.map((user, index) => (
-            <section className={styles.users}>
+            <section className={styles.users} key={user.id}>
               <div className={styles.position}>{index + 1}</div>
 
-              <div className={styles.userInfo}>
-                <div className={styles.user}>
-                  <img
-                    src={
-                      user.image.length > 2
-                        ? user.image
-                        : "https://gravatar.com/avatar/placeholder?d=mp"
-                    }
-                    alt={user.firstName}
-                  />
+              {/* <div className={styles.userInfo}></div> */}
 
-                  <div>
-                    <strong>{user.firstName}</strong>
-                    <p>
-                      <img src={level} alt="level" />
-                      Level {user.userLevel}
-                    </p>
-                  </div>
+              <div className={styles.user}>
+                <img
+                  src={
+                    user.image.length > 2
+                      ? user.image
+                      : "https://gravatar.com/avatar/placeholder?d=mp"
+                  }
+                  alt={user.firstName}
+                />
+
+                <div>
+                  <strong>{user.firstName}</strong>
+                  <p>
+                    <img src={level} alt="level" />
+                    Level {user.userLevel}
+                  </p>
                 </div>
+              </div>
 
-                <div className={styles.text}>
+              <div className={styles.text}>
+                <div>
                   <p>{user.challengesCompleted}</p>
                   <p>completados</p>
                 </div>
+              </div>
 
-                <div className={styles.text}>
-                  <p>
-                    {Math.round(Math.pow(user.experience / user.userLevel, 2))}
-                  </p>
-                  <p>xp</p>
-                </div>
+              <div className={styles.text}>
+                <p>{getTotalExperience(user)}</p>
+                <p>xp</p>
               </div>
             </section>
           ))}

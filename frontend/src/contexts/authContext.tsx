@@ -74,19 +74,26 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   async function SignIn({ email, password }: userToLogin) {
     setIsLoad(true);
-    const json = await SignInApi({ email, password });
-    if (!json.success) return Promise.reject(json.message);
-    const { token, user } = json.message;
-    BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
-    await getProfile();
+    // console.log("SignIn");
+    try {
+      const json = await SignInApi({ email, password });
+      // console.log(json);
 
-    localStorage.setItem("@lossless.User", JSON.stringify(user));
-    localStorage.setItem("@lossless.Token", token);
-    const oneDayTime = 1000 * 60 * 60 * 24;
-    const now = new Date();
-    const time = new Date(now.getTime() + oneDayTime);
-    localStorage.setItem("@lossless.Timelimt", time.toISOString());
-    setUser(user);
+      if (!json.success) return Promise.reject(json.message);
+      const { token, user } = json.message;
+      BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
+      await getProfile();
+
+      localStorage.setItem("@lossless.User", JSON.stringify(user));
+      localStorage.setItem("@lossless.Token", token);
+      const oneDayTime = 1000 * 60 * 60 * 24;
+      const now = new Date();
+      const time = new Date(now.getTime() + oneDayTime);
+      localStorage.setItem("@lossless.Timelimt", time.toISOString());
+      setUser(user);
+    } catch (error) {
+      // console.log(error);
+    }
 
     setIsLoad(false);
     const url = window.location.href;

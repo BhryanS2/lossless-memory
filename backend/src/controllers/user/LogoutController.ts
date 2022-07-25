@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { LogoutService } from "../../services/user/LogoutService";
+import { LogoutService } from "../../services/user/logoutService";
 
 export class LogoutController {
   async handle(req: Request, res: Response) {

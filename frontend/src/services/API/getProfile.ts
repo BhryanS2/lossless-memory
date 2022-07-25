@@ -5,7 +5,7 @@ export async function getProfileApi(): Promise<
   bodyResponseType | userProfileResponseProps
 > {
   try {
-    const response = await BaseApi.get("/user/profile");
+    const response = await BaseApi.get("/user/profile/");
     const data: bodyResponseType | userProfileResponseProps =
       await response.data;
 

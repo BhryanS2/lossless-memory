@@ -54,11 +54,7 @@ class AdminService {
             const challengesCompletedByUser = challengesCompleted.filter((challenge) => {
                 return challenge.userId === user.id;
             });
-            return {
-                ...user,
-                ...userProfile,
-                challengesCompleted: challengesCompletedByUser.length,
-            };
+            return Object.assign(Object.assign(Object.assign({}, user), userProfile), { challengesCompleted: challengesCompletedByUser.length });
         });
         // userToProfile
         return userToProfile;

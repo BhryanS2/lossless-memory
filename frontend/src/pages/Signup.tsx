@@ -21,6 +21,7 @@ interface FormProps extends userToSend {
 }
 
 export function Signup() {
+  document.title = "Cadastro | lossless";
   const formRef = useRef<FormHandles>(null);
   const [cpfValue, setCpfValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

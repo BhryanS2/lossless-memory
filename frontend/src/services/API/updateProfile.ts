@@ -6,7 +6,7 @@ export async function updateProfile(
   props: userProfileProps
 ): Promise<bodyResponseType | userProfileResponseProps> {
   try {
-    const response = await BaseApi.put("/user/profile", props);
+    const response = await BaseApi.put("/user/profile/", props);
     const data: bodyResponseType | userProfileResponseProps =
       await response.data;
 

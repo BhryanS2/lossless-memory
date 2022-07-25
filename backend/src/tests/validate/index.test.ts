@@ -1,5 +1,5 @@
 // import { expect, test, describe } from "@jest/globals";
-import { ValidateData } from "../../src/utils/validate";
+import { ValidateData } from "../../utils/validate";
 
 describe("API Test validade test suite", () => {
   const userDataCorrect = {

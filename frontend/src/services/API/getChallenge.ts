@@ -5,7 +5,7 @@ export async function getChallenge(): Promise<
   bodyResponseType | challengeReponseProps
 > {
   try {
-    const response = await BaseApi.get("/challenges");
+    const response = await BaseApi.get("/challenges/");
     const data: bodyResponseType | challengeReponseProps = await response.data;
 
     if (data.success === false) throw new Error(data.message);

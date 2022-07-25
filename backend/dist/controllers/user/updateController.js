@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateController = void 0;
-const UpdateService_1 = require("../../services/user/UpdateService");
+const updateService_1 = require("../../services/user/updateService");
 class UpdateController {
     async handle(request, response) {
         const { userId } = request;
         const data = request.body;
-        const service = new UpdateService_1.UpdateService();
+        const service = new updateService_1.UpdateService();
         try {
             await service.execute(Number(userId), data);
             response.status(204).json({

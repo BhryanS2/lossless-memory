@@ -1,8 +1,8 @@
 import { expect, test, describe } from "@jest/globals";
 
 import superTest, { Response } from "supertest";
-import { serverHttp } from "../../src/app";
-import { challengeType, userProfileType } from "../../src/types/auth";
+import { serverHttp } from "../../app";
+import { challengeType, userProfileType } from "../../types/auth";
 import { challenges } from "./challenges";
 import { userData } from "./user";
 

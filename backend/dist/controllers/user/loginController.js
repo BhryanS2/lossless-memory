@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignupController = void 0;
-const SignupService_1 = require("../../services/user/SignupService");
-class SignupController {
+exports.LoginController = void 0;
+const loginService_1 = require("../../services/user/loginService");
+class LoginController {
     async handle(req, res) {
         try {
-            const service = new SignupService_1.SignupService();
+            const service = new loginService_1.LoginService();
             const response = await service.execute(req.body);
-            return res.status(201).json({ message: response, success: true });
+            return res.json({ message: response, success: true });
         }
         catch (error) {
             return res.status(400).json({ message: error.message, success: false });
         }
     }
 }
-exports.SignupController = SignupController;
+exports.LoginController = LoginController;

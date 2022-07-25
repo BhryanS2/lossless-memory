@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AdminService } from "../services/AdminService";
+import { AdminService } from "../services/adminService";
 
 export class Admin {
   async handle(req: Request, res: Response) {

@@ -20,6 +20,7 @@ interface handleSubimitProps extends userToLogin {
 }
 
 export function Login() {
+  document.title = "Login | lossless";
   const formRef = useRef<FormHandles>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const { SignIn } = useAuth();

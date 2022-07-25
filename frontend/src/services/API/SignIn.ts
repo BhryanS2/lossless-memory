@@ -6,7 +6,8 @@ export async function SignIn(
   props: userToLogin
 ): Promise<bodyResponseType | userLoginresponseType> {
   try {
-    const response = await BaseApi.post("/user/login", props);
+    const response = await BaseApi.post("/user/login/", props);
+    // console.log(response.data);
     const data: bodyResponseType | userLoginresponseType = await response.data;
 
     if (data.success === false) throw new Error(data.message);
@@ -16,6 +17,8 @@ export async function SignIn(
       success,
     };
   } catch (error: any) {
+    // console.log("error");
+    // console.log(error);
     const messageError =
       error.response.data.message === "Invalid password"
         ? "Senha inválida"

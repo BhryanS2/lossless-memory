@@ -2,20 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cpf = void 0;
 class Cpf {
-    ListReject = [
-        "00000000000",
-        "11111111111",
-        "22222222222",
-        "33333333333",
-        "44444444444",
-        "55555555555",
-        "66666666666",
-        "77777777777",
-        "88888888888",
-        "99999999999",
-    ];
-    STRICT_STRIP_REGEX = /[.-]/g;
-    LOOSE_STRIP_REGEX = /[^\d]/g;
+    constructor() {
+        this.ListReject = [
+            "00000000000",
+            "11111111111",
+            "22222222222",
+            "33333333333",
+            "44444444444",
+            "55555555555",
+            "66666666666",
+            "77777777777",
+            "88888888888",
+            "99999999999",
+        ];
+        this.STRICT_STRIP_REGEX = /[.-]/g;
+        this.LOOSE_STRIP_REGEX = /[^\d]/g;
+    }
     verifierDigit(numbers) {
         const numberList = numbers.split("").map(Number);
         const modulus = numberList.length + 1;
