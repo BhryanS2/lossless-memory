@@ -5,7 +5,6 @@ import { Profile } from "../components/Profile";
 import { ChallengeBox } from "../components/ChallengeBox";
 import { Navbar } from "../components/navbar";
 
-import { CountdownProvider } from "../contexts/CountdownContext";
 import { ChallengesProvider } from "../contexts/ChallengeContext";
 
 import styles from "../styles/pages/Home.module.css";
@@ -27,19 +26,16 @@ export default function Home(props: HomeProps) {
       >
         <div className={styles.container}>
           <ExperienceBar />
-
-          <CountdownProvider>
-            <section>
-              <div>
-                <Profile />
-                <CompletedChallenges />
-                <Countdown />
-              </div>
-              <div className={styles.challengeBox}>
-                <ChallengeBox />
-              </div>
-            </section>
-          </CountdownProvider>
+          <section>
+            <div>
+              <Profile />
+              <CompletedChallenges />
+              <Countdown />
+            </div>
+            <div className={styles.challengeBox}>
+              <ChallengeBox />
+            </div>
+          </section>
         </div>
       </ChallengesProvider>
     </Navbar>
