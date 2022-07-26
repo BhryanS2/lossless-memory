@@ -47,7 +47,7 @@ export function Rank() {
   }
 
   return (
-    <Navbar isHome={false} isRank>
+    <Navbar toPath="/rank">
       <main className={styles.container}>
         <div className={styles.leaderboard}>
           <strong>Leaderboard</strong>

@@ -12,16 +12,18 @@ import { useAuth } from "../hooks/useAuth";
 import style from "../styles/components/Nav.module.css";
 
 type NavProps = {
-  isHome: boolean;
-  isRank: boolean;
+  toPath: "/" | "/rank" | "/profile";
   children?: ReactNode;
 };
 
-export function Navbar({ isHome, isRank, children }: NavProps) {
-  const activeHome = isHome;
+export function Navbar({ toPath, children }: NavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const { SignOut } = useAuth();
+
+  const isActive = (path: "/" | "/rank" | "/profile") => {
+    return toPath === path ? "active" : "";
+  };
 
   return (
     <React.Fragment>
@@ -36,32 +38,25 @@ export function Navbar({ isHome, isRank, children }: NavProps) {
             </div>
 
             <div className={style.NavContainer}>
-              {activeHome ? (
-                <button className={`${style.ActiveNav} ${style.buttons}`}>
-                  <Link to="/">
-                    <img src={homeActive} alt="home" />
-                  </Link>
+              <Link to="/">
+                <button
+                  className={`${isActive("/") ? style.ActiveNav : ""} ${
+                    style.buttons
+                  }`}
+                >
+                  <img src={isActive("/") ? homeActive : home} alt="home" />
                 </button>
-              ) : (
-                <button className={style.buttons}>
-                  <Link to="/">
-                    <img src={home} alt="home" />
-                  </Link>
+              </Link>
+              <Link to="/rank">
+                <button
+                  className={`
+                    ${isActive("/rank") ? style.ActiveNav : ""}
+                    ${style.buttons}
+                  `}
+                >
+                  <img src={isActive("/rank") ? rankActive : rank} alt="rank" />
                 </button>
-              )}
-              {isRank ? (
-                <button className={`${style.ActiveNav} ${style.buttons}`}>
-                  <Link to="/rank">
-                    <img src={rankActive} alt="home" />
-                  </Link>
-                </button>
-              ) : (
-                <button className={style.buttons}>
-                  <Link to="/rank">
-                    <img src={rank} alt="home" />
-                  </Link>
-                </button>
-              )}
+              </Link>
             </div>
 
             <div>

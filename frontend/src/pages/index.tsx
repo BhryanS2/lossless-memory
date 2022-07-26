@@ -10,7 +10,7 @@ import styles from "../styles/pages/Home.module.css";
 export default function Home() {
   document.title = "Home | lossless";
   return (
-    <Navbar isHome isRank={false}>
+    <Navbar toPath="/">
       <div className={styles.container}>
         <ExperienceBar />
         <section>

@@ -4,12 +4,12 @@
 
 .NavBar {
   position: absolute;
-  display: none;
   height: 100%;
   width: 8rem;
   background: var(--white);
-  transition: 5s ease-in-out;
+  transition: 1s ease-in;
   z-index: 5;
+  left: -100%;
 }
 
 /* Global formatation */
@@ -23,11 +23,7 @@
 }
 
 .NavBar.active {
-  display: initial;
-}
-
-.NavBar.active + .NavBarOff {
-  display: none;
+  left: 0;
 }
 
 .NavBar .close {
@@ -102,7 +98,7 @@
 
   font-family: Inter;
   font-weight: 600;
-  transition: background-color 0.2s;
+  transition: background 0.2s;
 }
 
 .NavBarOff button:hover {
