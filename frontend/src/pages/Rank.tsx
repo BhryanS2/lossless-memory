@@ -38,7 +38,7 @@ export function Rank() {
       const userExperience = Math.pow((i + 1) * 4, 2);
       totalExperience += userExperience;
     }
-    totalExperience = Math.round(totalExperience - user.experience);
+    totalExperience = Math.round(totalExperience + user.experience);
     return totalExperience;
   }
 
