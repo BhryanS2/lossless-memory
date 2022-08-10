@@ -13,8 +13,9 @@ export class UpdateProfileController {
         success: true,
       });
     } catch (error) {
+      const json = JSON.parse(error.message);
       res.status(400).json({
-        message: error.message,
+        message: json,
         success: false,
       });
     }

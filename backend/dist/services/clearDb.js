@@ -3,7 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteManyDb = void 0;
 const prisma_1 = require("../prisma");
 class DeleteManyDb {
-    async execute() {
+    async execute(userId) {
+        if (userId === NaN) {
+            throw new Error("User id is not a number");
+        }
+        const user = await prisma_1.prisma.users.findFirst({ where: { id: userId } });
+        if (!user) {
+            throw new Error("User not found");
+        }
+        if (user.userTypeId !== 1) {
+            throw new Error("User is not admin");
+        }
         const users = await prisma_1.prisma.users.findMany({});
         const userLog = await prisma_1.prisma.userLogs.findMany({});
         const userType = await prisma_1.prisma.userType.findMany({});

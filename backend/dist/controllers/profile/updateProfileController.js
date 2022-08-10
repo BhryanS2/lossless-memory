@@ -15,8 +15,9 @@ class UpdateProfileController {
             });
         }
         catch (error) {
+            const json = JSON.parse(error.message);
             res.status(400).json({
-                message: error.message,
+                message: json,
                 success: false,
             });
         }

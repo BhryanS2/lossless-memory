@@ -77,7 +77,7 @@ export class UpdateProfileService {
 
     return {
       userProfile: profile,
-      challengeCompleted: challengeCompleted.length,
+      challengesCompleted: challengeCompleted.length,
     };
   }
 }

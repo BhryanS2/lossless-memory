@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { AdminService } from "../services/adminService";
+import { getUsersService } from "../../services/user/getUsersService";
 
-export class Admin {
+export class getUsersControllers {
   async handle(req: Request, res: Response) {
     try {
-      const service = new AdminService();
+      const service = new getUsersService();
       const response = await service.execute();
       return res.json({ message: response, success: true });
     } catch (error) {

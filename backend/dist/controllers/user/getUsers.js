@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Admin = void 0;
-const adminService_1 = require("../services/adminService");
-class Admin {
+exports.getUsersControllers = void 0;
+const getUsersService_1 = require("../../services/user/getUsersService");
+class getUsersControllers {
     async handle(req, res) {
         try {
-            const service = new adminService_1.AdminService();
+            const service = new getUsersService_1.getUsersService();
             const response = await service.execute();
             return res.json({ message: response, success: true });
         }
@@ -14,4 +14,4 @@ class Admin {
         }
     }
 }
-exports.Admin = Admin;
+exports.getUsersControllers = getUsersControllers;

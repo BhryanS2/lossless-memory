@@ -1,7 +1,20 @@
 import { prisma } from "../prisma";
 
 export class DeleteManyDb {
-  async execute() {
+  async execute(userId: number) {
+    if (userId === NaN) {
+      throw new Error("User id is not a number");
+    }
+
+    const user = await prisma.users.findFirst({ where: { id: userId } });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.userTypeId !== 1) {
+      throw new Error("User is not admin");
+    }
+
     const users = await prisma.users.findMany({});
     const userLog = await prisma.userLogs.findMany({});
     const userType = await prisma.userType.findMany({});
