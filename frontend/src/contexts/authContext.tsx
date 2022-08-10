@@ -11,6 +11,7 @@ import {
   userToSend,
   userProfileResponseProps,
 } from "../@types";
+import Cookies from "js-cookie";
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -30,7 +31,7 @@ const AuthContext = createContext({} as AuthContextData);
 export function AuthContextProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<userProps | null>(null);
   const [profile, setProfile] = useState<userProfileResponseProps | null>(null);
-  const [isLoad, setIsLoad] = useState(true);
+  const [isLoad, setIsLoad] = useState(false);
 
   function SignOut() {
     localStorage.removeItem("@lossless.Token");
@@ -66,18 +67,29 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       }
       BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
       const userParsed = JSON.parse(user);
+      const profileJSON = JSON.parse(profile);
+
+      const challengesCompletedCookies = Number(
+        Cookies.get(`challengeComplete.${userParsed.firstName}`)
+      );
+      const challengesCompleted = profileJSON.challengesCompleted;
+
+      if (challengesCompletedCookies !== challengesCompleted) {
+        getProfile();
+      } else {
+        setProfile(profileJSON);
+      }
       setUser(userParsed);
-      setProfile(JSON.parse(profile));
       setIsLoad(false);
     })();
   }, []);
 
   async function SignIn({ email, password }: userToLogin) {
     setIsLoad(true);
-    // console.log("SignIn");
+    //
     try {
       const json = await SignInApi({ email, password });
-      // console.log(json);
+      //
 
       if (!json.success) return Promise.reject(json.message);
       const { token, user } = json.message;
@@ -92,7 +104,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       localStorage.setItem("@lossless.Timelimt", time.toISOString());
       setUser(user);
     } catch (error) {
-      // console.log(error);
+      //
     }
 
     setIsLoad(false);
@@ -119,6 +131,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     const response = await getProfileApi();
     if (!response.success) return Promise.reject(response.message);
     const profile = response.message as userProfileResponseProps;
+
     localStorage.setItem("@lossless.Profile", JSON.stringify(profile));
     setProfile(profile);
     setIsLoad(false);

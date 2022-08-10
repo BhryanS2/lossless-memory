@@ -74,16 +74,6 @@ export function ChallengesProvider({
     Cookies.set(`challengeComplete.${name}`, String(challengeComplete));
   }, [level, currentExperience, challengeComplete, name]);
 
-  useEffect(() => {
-    if (activeChallenge) {
-      updateProfile({
-        challengeCompletedId: activeChallenge?.id ? activeChallenge.id : 0,
-        experience: currentExperience,
-        userLevel: level,
-      });
-    }
-  }, [currentExperience, level, activeChallenge]);
-
   function levelUp() {
     setLevel(level + 1);
     setIsLevelUpModalOpen(true);
@@ -136,8 +126,19 @@ export function ChallengesProvider({
     }
 
     setCurrentExperience(finalExperience);
-    setActiveChallenge(null);
     setChallengeComplete(challengeComplete + 1);
+    updateProfile({
+      challengeCompletedId: activeChallenge.id,
+      experience: finalExperience,
+      userLevel: finalExperience >= experienceToNextLevel ? level + 1 : level,
+    }).then((res) => {
+      const profile = res.message;
+      if (!res.success) {
+        return;
+      }
+      localStorage.setItem("@lossless.Profile", JSON.stringify(profile));
+    });
+    setActiveChallenge(null);
   }
 
   async function getChallengeInApi() {
