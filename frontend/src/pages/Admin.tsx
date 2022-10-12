@@ -67,35 +67,33 @@ export function Admin() {
             <h2>Challenges</h2>
             <button onClick={openCreateForm}>Create</button>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Type</th>
-                <th>Experience</th>
-                <th>Description</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <section className={styles.challengeTable}>
+            <div className={styles.challengeTableHead}>
+              <p>ID</p>
+              <p>Type</p>
+              <p>Experience</p>
+              <p>Description</p>
+              <p>Actions</p>
+            </div>
+            <div className={styles.challengeTableBody}>
               {challenges.map((challenge) => (
-                <tr key={challenge.id}>
-                  <td>{challenge.id}</td>
-                  <td>{challenge.type}</td>
-                  <td>{challenge.amount}</td>
-                  <td>{challenge.description}</td>
-                  <td>
+                <div key={challenge.id} className={styles.challengeTableRow}>
+                  <p>{challenge.id}</p>
+                  <p>{challenge.type}</p>
+                  <p>{challenge.amount}</p>
+                  <p>{challenge.description}</p>
+                  <div className={styles.challengeTableActions}>
                     <button onClick={() => handleEditModal(challenge)}>
                       Edit
                     </button>
                     <button onClick={() => handleDeleteChallenge(challenge.id)}>
                       Delete
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </section>
         </section>
       </main>
     </Navbar>

@@ -1,3 +1,57 @@
+:root {
+  --shape: rgb(255, 255, 255);
+  --text-body: #000;
+}
+
 .container {
-  margin-top: 2rem;
+  margin-top: 2.4rem;
+  width: 100%;
+}
+
+.challengeTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.challengeTable {
+  margin: 0 auto;
+  margin-top: 1rem;
+  width: 95%;
+  border-spacing: 0 0.5rem;
+}
+
+.challengeTableRow,
+.challengeTableHead {
+  display: grid;
+  /* ID  Type  Experience  Description  Actions */
+  grid-template-columns: 5% 10% 10% 70% 5%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+.challengeTableHead {
+  color: var(--text-body);
+  font-weight: 600;
+  padding: 1rem 2rem;
+  text-align: left;
+  line-height: 1.5rem;
+  background-color: var(--shape);
+}
+.challengeTableBody {
+  background: var(--shape);
+  border-radius: 0.25rem;
+}
+
+.challengeTableBody .challengeTableRow:nth-child(2n-1) {
+  background: var(--gray-line);
+}
+
+.challengeTableRow {
+  transition: all 0.2s;
+  background: var(--shape);
+}
+.challengeTableActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
