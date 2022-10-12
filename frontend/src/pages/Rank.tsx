@@ -42,10 +42,6 @@ export function Rank() {
     return totalExperience;
   }
 
-  if (isLoading || !users) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Navbar toPath="/rank">
       <main className={styles.container}>
@@ -58,45 +54,48 @@ export function Rank() {
             <p className={styles.infoChallenge}>DESAFIOS</p>
             <p className={styles.infoExperience}>EXPERIÊNCIA</p>
           </section>
+          {isLoading || !users ? (
+            <div>Carregando usuários...</div>
+          ) : (
+            users.map((user, index) => (
+              <section className={styles.users} key={user.id}>
+                <div className={styles.position}>{index + 1}</div>
 
-          {users.map((user, index) => (
-            <section className={styles.users} key={user.id}>
-              <div className={styles.position}>{index + 1}</div>
+                {/* <div className={styles.userInfo}></div> */}
 
-              {/* <div className={styles.userInfo}></div> */}
+                <div className={styles.user}>
+                  <img
+                    src={
+                      user.image.length > 2
+                        ? user.image
+                        : "https://gravatar.com/avatar/placeholder?d=mp"
+                    }
+                    alt={user.firstName}
+                  />
 
-              <div className={styles.user}>
-                <img
-                  src={
-                    user.image.length > 2
-                      ? user.image
-                      : "https://gravatar.com/avatar/placeholder?d=mp"
-                  }
-                  alt={user.firstName}
-                />
-
-                <div>
-                  <strong>{user.firstName}</strong>
-                  <p>
-                    <img src={level} alt="level" />
-                    Level {user.userLevel}
-                  </p>
+                  <div>
+                    <strong>{user.firstName}</strong>
+                    <p>
+                      <img src={level} alt="level" />
+                      Level {user.userLevel}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.text}>
-                <div>
-                  <p>{user.challengesCompleted}</p>
-                  <p>completados</p>
+                <div className={styles.text}>
+                  <div>
+                    <p>{user.challengesCompleted}</p>
+                    <p>completados</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.text}>
-                <p>{getTotalExperience(user)}</p>
-                <p>xp</p>
-              </div>
-            </section>
-          ))}
+                <div className={styles.text}>
+                  <p>{getTotalExperience(user)}</p>
+                  <p>xp</p>
+                </div>
+              </section>
+            ))
+          )}
         </div>
       </main>
     </Navbar>

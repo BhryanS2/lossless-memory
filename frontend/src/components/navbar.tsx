@@ -6,23 +6,25 @@ import homeActive from "../assets/icons/home-active.svg";
 import home from "../assets/icons/home.svg";
 import rankActive from "../assets/icons/award-active.svg";
 import rank from "../assets/icons/award.svg";
+import adminActive from "../assets/icons/admin-active.svg";
+import admin from "../assets/icons/admin.svg";
 
 import { useAuth } from "../hooks/useAuth";
 
 import style from "../styles/components/Nav.module.css";
 
 type NavProps = {
-  toPath: "/" | "/rank" | "/profile";
+  toPath: "/" | "/rank" | "/profile" | "/admin";
   children?: ReactNode;
 };
 
 export function Navbar({ toPath, children }: NavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-  const { SignOut } = useAuth();
+  const { SignOut, user } = useAuth();
 
-  const isActive = (path: "/" | "/rank" | "/profile") => {
-    return toPath === path ? "active" : "";
+  const isActive = (path: string) => {
+    return toPath === path;
   };
 
   return (
@@ -57,6 +59,21 @@ export function Navbar({ toPath, children }: NavProps) {
                   <img src={isActive("/rank") ? rankActive : rank} alt="rank" />
                 </button>
               </Link>
+              {process.env.REACT_APP_ADMIN_EMAIL === user?.email && (
+                <Link to="/admin">
+                  <button
+                    className={`
+                    ${isActive("/admin") ? style.ActiveNav : ""}
+                    ${style.buttons}
+                  `}
+                  >
+                    <img
+                      src={isActive("/admin") ? adminActive : admin}
+                      alt="admin"
+                    />
+                  </button>
+                </Link>
+              )}
             </div>
 
             <div>

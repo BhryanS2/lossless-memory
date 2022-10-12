@@ -35,11 +35,13 @@ export interface userProfileResponseProps extends bodyResponseType {
   };
 }
 
+interface challengeProps {
+  id: number;
+  type: string;
+  description: string;
+  amount: number;
+}
+
 export interface challengeReponseProps extends bodyResponseType {
-  message: {
-    id: number;
-    type: string;
-    description: string;
-    amount: number;
-  };
+  message: challengeProps[];
 }
