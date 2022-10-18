@@ -13,8 +13,7 @@
   font-weight: 600;
 }
 .challengeTable {
-  margin: 0 auto;
-  margin-top: 1rem;
+  margin: 1rem auto;
   width: 95%;
   border-spacing: 0 0.5rem;
 }
@@ -27,15 +26,16 @@
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   text-align: center;
+  place-content: center;
+place-items: center;
 }
 
 .challengeTableHead {
   color: var(--text-body);
   font-weight: 600;
-  padding: 1rem 2rem;
-  text-align: left;
   line-height: 1.5rem;
   background-color: var(--shape);
+  margin-bottom: 1rem;
 }
 .challengeTableBody {
   background: var(--shape);
@@ -52,6 +52,53 @@
 }
 .challengeTableActions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.btn {
+  width: 100%;
+  height: 2rem;
+  border: 0;
+  border-radius: 0.25rem;
+  color: var(--blue);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 0 0.5rem;
+  border: 2px solid var(--blue);
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.btn.delete {
+  color: var(--red);
+  border: 2px solid var(--red);
+}
+
+.btn.delete:hover {
+  background: var(--red);
+  color: var(--white);
+}
+
+.btn.createButton {
+  width: 120px;
+  height: 2rem;
+  border: 0;
+  border-radius: 0.25rem;
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 0 0.5rem;
+  background: var(--blue);
+  transition: all 0.2s;
+}
+
+.btn.createButton:hover {
+  background: var(--blue-dark);
 }

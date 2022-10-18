@@ -1,0 +1,140 @@
+.modalContainer {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / .5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.formModal {
+  width: 400px;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background: var(--white);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  margin-top: 1.5rem;
+  border: 0;
+  border-radius: 5px;
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  background: var(--blue);
+  transition: background-color 0.2s;
+}
+
+
+.btn:hover {
+  background: var(--blue-dark);
+}
+
+.floatButton {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s;
+  z-index: 10;
+}
+
+.floatButton .btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  margin: 0;
+  font-size: 1.5rem;
+  background-color: transparent;
+  border: 2px solid var(--blue);
+  color: var(--blue);
+  transition: all 0.2s ease-in-out;
+}
+
+.floatButton .btn:hover {
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+.selectContainer {
+  width: 100%;
+}
+
+.select {
+  width: 100%;
+  height: 3rem;
+  margin-top: 1rem;
+  padding: 0 1rem;
+  border: 2px solid var(--gray-line);
+  border-radius: 5px;
+  background: var(--white);
+  font: 400 1rem "Inter", sans-serif;
+  color: var(--title);
+}
+
+.select:focus {
+  outline: none;
+  border: 2px solid var(--blue);
+}
+
+.select option {
+  font: 400 1rem "Inter", sans-serif;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input {
+  outline: none;
+  width: 100%;
+  height: 3rem;
+  padding: 0 1rem;
+  border: 2px solid var(--gray-line);
+  border-radius: 5px;
+  background: var(--white);
+  font: 400 1rem "Inter", sans-serif;
+  color: var(--title);
+
+}
+
+.input:focus {
+  outline: none;
+  border: 2px solid var(--blue);
+}
+
+.input::placeholder {
+  color: var(--text);
+}
+
+.input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.input:valid, .select:valid {
+  border: 2px solid var(--green);
+}

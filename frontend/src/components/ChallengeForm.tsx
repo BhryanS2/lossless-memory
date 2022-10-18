@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { challengeProps } from "../@types";
+import styles from "../styles/components/ChallengeForm.module.css";
 
 type ChallengeFormProps = {
   closeModal: () => void;
@@ -24,46 +25,65 @@ export function ChallengeForm({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>
-        {data?.id ? `Editando o desafio ${data.id}` : "Criando um novo desafio"}
-      </h2>
-      <div>
-        <select
-          name="type"
-          id="type"
-          value={type}
-          onChange={(event) => {
-            setType(event.target.value);
-          }}
-        >
-          <option value="body">Body</option>
-          <option value="eye">Eye</option>
-        </select>
-      </div>
-      <div>
-        <input
-          type="number"
-          name="amount"
-          id="amount"
-          value={amount}
-          onChange={(event) => {
-            setAmount(Number(event.target.value));
-          }}
-        />
-      </div>
-      <div>
-        <input
-          type="text"
-          name="description"
-          id="description"
-          value={description}
-          onChange={(event) => {
-            setDescription(event.target.value);
-          }}
-        />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
+    <div className={styles.modalContainer}>
+      <form onSubmit={handleSubmit} className={styles.formModal}>
+        <h2>
+          {data?.id ? `Editando o desafio ${data.id}` : "Criando um novo desafio"}
+        </h2>
+        <div className={styles.selectContainer}>
+          <select
+            name="type"
+            id="type"
+            value={type}
+            onChange={(event) => {
+              setType(event.target.value);
+            }}
+            className={styles.select}
+            required
+          >
+            <option value="body">Body</option>
+            <option value="eye">Eye</option>
+          </select>
+        </div>
+        <div className={styles.inputGroup}>
+          <input
+            type="text"
+            name="amount"
+            id="amount"
+            value={amount}
+            onChange={(event) => {
+              const { value } = event.target;
+              const numbers = value.replace(/\D/g, "");
+              setAmount(Number(numbers));
+            }}
+            placeholder="Quantidade de experiência"
+            className={styles.input}
+            required
+            min={1}
+
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <input
+            type="text"
+            name="description"
+            id="description"
+            value={description}
+            onChange={(event) => {
+              setDescription(event.target.value);
+            }}
+            placeholder="Descrição"
+            className={styles.input}
+            required
+          />
+        </div>
+        <button type="submit" className={`${styles.btn} ${styles.submit}`}>Submit</button>
+        <div className={`${styles.floatButton}`} >
+          <button onClick={closeModal} className={styles.btn}>
+            &times;
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

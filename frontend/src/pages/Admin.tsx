@@ -65,7 +65,10 @@ export function Admin() {
         <section>
           <div className={styles.challengeTitle}>
             <h2>Challenges</h2>
-            <button onClick={openCreateForm}>Create</button>
+            <button
+              onClick={openCreateForm}
+              className={`${styles.btn} ${styles.createButton}`}
+            >Create</button>
           </div>
           <section className={styles.challengeTable}>
             <div className={styles.challengeTableHead}>
@@ -83,10 +86,10 @@ export function Admin() {
                   <p>{challenge.amount}</p>
                   <p>{challenge.description}</p>
                   <div className={styles.challengeTableActions}>
-                    <button onClick={() => handleEditModal(challenge)}>
+                    <button onClick={() => handleEditModal(challenge)} className={styles.btn}>
                       Edit
                     </button>
-                    <button onClick={() => handleDeleteChallenge(challenge.id)}>
+                    <button onClick={() => handleDeleteChallenge(challenge.id)} className={`${styles.btn} ${styles.delete}`}>
                       Delete
                     </button>
                   </div>
