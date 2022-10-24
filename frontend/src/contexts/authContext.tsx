@@ -4,6 +4,7 @@ import { BaseApi } from "../services/API/ConfigApi";
 import { SignIn as SignInApi } from "../services/API/SignIn";
 import { SignUp as SignUpAPi } from "../services/API/SignUp";
 import { getProfileApi } from "../services/API/getProfile";
+import { changePassword as ChangePasswordApi } from "../services/API/ChangePassword";
 
 import {
   userProps,
@@ -12,6 +13,7 @@ import {
   userProfileResponseProps,
 } from "../@types";
 import Cookies from "js-cookie";
+import { bodyResponseType } from "../@types/API";
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -22,9 +24,13 @@ type AuthContextData = {
   user: userProps | null;
   profile: userProfileResponseProps | null;
   loading: boolean;
-  SignIn(data: userToLogin): Promise<void>;
+  SignIn(data: userToLogin): Promise<any>;
   SignOut(): void;
   SignUp(data: userToSend): Promise<void>;
+  changePassword(data: {
+    email: string;
+    password: string;
+  }): Promise<bodyResponseType>;
 };
 const AuthContext = createContext({} as AuthContextData);
 
@@ -85,13 +91,9 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   }, []);
 
   async function SignIn({ email, password }: userToLogin) {
-    setIsLoad(true);
-    //
     try {
       const json = await SignInApi({ email, password });
-      //
-
-      if (!json.success) return Promise.reject(json.message);
+      if (!json.success) return json
       const { token, user } = json.message;
       BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
       await getProfile();
@@ -103,11 +105,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       const time = new Date(now.getTime() + oneDayTime);
       localStorage.setItem("@lossless.Timelimt", time.toISOString());
       setUser(user);
+      setIsLoad(false);
     } catch (error) {
-      //
+      setIsLoad(false);
     }
 
-    setIsLoad(false);
     const url = window.location.href;
     if (url.includes("/signup")) {
       window.history.replaceState({}, "", "/");
@@ -136,6 +138,13 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     setProfile(profile);
     setIsLoad(false);
   }
+
+  async function changePassword(data: {
+    email: string;
+    password: string;
+  }) {
+    return ChangePasswordApi(data.email, data.password);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -146,6 +155,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         profile,
         user,
         loading: isLoad,
+        changePassword,
       }}
     >
       {children}

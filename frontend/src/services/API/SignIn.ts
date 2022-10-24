@@ -17,14 +17,9 @@ export async function SignIn(
       success,
     };
   } catch (error: any) {
-    // console.log("error");
-    // console.log(error);
-    const messageError =
-      error.response.data.message === "Invalid password"
-        ? "Senha inválida"
-        : "Erro ao fazer login";
+    const messageError = "Email e/ou senha errada"
     return {
-      message: messageError as any,
+      message: messageError,
       success: false,
     };
   }

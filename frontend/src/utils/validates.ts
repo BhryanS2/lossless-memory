@@ -5,6 +5,12 @@ interface userToSignup extends userToSend {
   confirmPassword: string;
 }
 
+type ChangePasswordProps = {
+  email: string;
+  password: string;
+  confirmPassword: string
+}
+
 export class Validate {
   async signup(signup: userToSignup) {
     await this.email(signup.email);
@@ -18,6 +24,16 @@ export class Validate {
         ? false
         : "As senhas não conferem";
     if (confirmPassword) throw new Error(confirmPassword);
+  }
+
+  async changePassword({email, password, confirmPassword}: ChangePasswordProps) {
+    this.password(password);
+    const confirmPasswordError =
+      password === confirmPassword
+        ? false
+        : "As senhas não conferem";
+    if (confirmPasswordError) throw new Error(confirmPasswordError);
+    await this.email(email);
   }
 
   async email(email: string) {

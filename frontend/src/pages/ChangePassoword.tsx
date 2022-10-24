@@ -1,39 +1,55 @@
 import { useRef, useState } from "react";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import { Link } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
 
-import { Input } from "../components/form/input";
+import { Validate } from "../utils/validates";
 
-import { userToLogin } from "../@types";
+import { Input } from "../components/form/input";
 
 import simbolo from "../assets/icons/Simbolo.svg";
 import logo from "../assets/icons/Logo.svg";
 
 import style from "../styles/components/formPages.module.css";
-import stylesForm from "../styles/components/form/form.module.css";
+import formStyle from "../styles/components/form/form.module.css";
 
-interface handleSubimitProps extends userToLogin {
-  ConfirmPassword: string;
+interface FormProps {
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
-export function Login() {
-  document.title = "Login | lossless";
+export function ChangePassword() {
+  document.title = "ChangePassword | lossless";
   const formRef = useRef<FormHandles>(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const { SignIn } = useAuth();
+  const { changePassword } = useAuth();
 
-  async function handleSubmit(data: handleSubimitProps) {
+  const toValidate = async (data: FormProps) => {
+    const validate = new Validate();
     setErrorMessage("");
     try {
-      const json = await SignIn(data);
-      if(!json.success) {
-        setErrorMessage("Email e/ou senha incorretos");
-      }
+      await validate.changePassword(data);
+      return true;
     } catch (error: any) {
-      setErrorMessage("Email e/ou senha incorretos");
+      setErrorMessage(error.message);
+      return false;
+    }
+  };
+
+  async function handleSubmit(data: FormProps) {
+    const isValid = await toValidate(data);
+    if (!isValid) return;
+    setErrorMessage("");
+    try {
+      const response = await changePassword(data);
+      if(!response.success) {
+        setErrorMessage("Erro ao alterar a senha");
+      }
+      setErrorMessage("Senha alterada com sucesso");
+    } catch (error) {
+      setErrorMessage("Erro ao alterar a senha");
     }
   }
 
@@ -41,6 +57,14 @@ export function Login() {
     <section className={style.Container}>
       <div className={style.Image}>
         <img src={simbolo} alt="logo" />
+      </div>
+      <div
+        className={style.goBack}
+        onClick={() => {
+          window.history.back();
+        }}
+      >
+        <i className="arrow left"></i>
       </div>
       <main className={style.ContentContainer}>
         <div className={style.Content}>
@@ -57,9 +81,9 @@ export function Login() {
               </div>
             )}
             <Form
+              className={formStyle.form}
+              onSubmit={handleSubmit}
               ref={formRef}
-              onSubmit={(e) => handleSubmit(e)}
-              className={stylesForm.form}
             >
               <Input
                 type="email"
@@ -72,21 +96,19 @@ export function Login() {
                 type="password"
                 name="password"
                 datavalue="Senha"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
               />
-              <button type="submit">Entrar</button>
+              <Input
+                type="password"
+                name="confirmPassword"
+                datavalue="Confirmar Senha"
+                autoComplete="new-password"
+                required
+              />
+              <button type="submit">Alterar Senha</button>
             </Form>
           </section>
-
-          <Link to="/signup" className={style.goOtherPage}>
-            Cadastre-se
-          </Link>
-
-          <Link to="/change-password" className={style.goOtherPage}>
-            Esqueci minha senha
-          </Link>
-
         </div>
       </main>
     </section>
