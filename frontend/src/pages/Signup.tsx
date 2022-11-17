@@ -24,6 +24,15 @@ export function Signup() {
   document.title = "Cadastro | lossless";
   const formRef = useRef<FormHandles>(null);
   const [cpfValue, setCpfValue] = useState("");
+  const [password, setPassword] = useState("");
+  const [passowrdActive, setPasswordActive] = useState(false);
+  const [requirementsPassword, setRequirementsPassword] = useState({
+    length: false,
+    number: false,
+    specialCharacter: false,
+    upperCase: false,
+    lowerCase: false,
+  });
   const [errorMessage, setErrorMessage] = useState("");
   const { SignUp } = useAuth();
 
@@ -48,6 +57,25 @@ export function Signup() {
       setErrorMessage("Usuário já existe");
     }
   }
+
+  function validatePassword(password: string) {
+    const errors = {
+      length: false,
+      number: false,
+      specialCharacter: false,
+      upperCase: false,
+      lowerCase: false,
+    };
+    if (password.match(/[A-Z]/g)) errors.upperCase = true;
+    if (password.match(/[a-z]/g)) errors.lowerCase = true;
+    if (password.match(/\d/g)) errors.number = true;
+    if (password.match(/[!@#$%^&*()_+?|[\]{};:><,'"]/g))
+      errors.specialCharacter = true;
+    if (password.length > 8) errors.length = true;
+    setRequirementsPassword(errors);
+    setPassword(password);
+  }
+
   return (
     <section className={style.Container}>
       <div className={style.Image}>
@@ -101,13 +129,63 @@ export function Signup() {
                 required
                 autoComplete="email"
               />
-              <Input
-                type="password"
-                name="password"
-                datavalue="Senha"
-                autoComplete="new-password"
-                required
-              />
+              <div className={style.password}>
+                <Input
+                  type="password"
+                  name="password"
+                  datavalue="Senha"
+                  autoComplete="new-password"
+                  required
+                  value={password}
+                  onChange={(e) => validatePassword(e.target.value)}
+                  onFocus={() => {
+                    setPasswordActive(true);
+                  }}
+                  onBlur={() => {
+                    setPasswordActive(false);
+                  }}
+                />
+                <div
+                  className={`${style.requirements} ${
+                    passowrdActive ? style.active : ""
+                  }`}
+                >
+                  <p>Senha deve conter:</p>
+                  <ul>
+                    <li
+                      className={requirementsPassword.length ? style.valid : ""}
+                    >
+                      8 caracteres
+                    </li>
+                    <li
+                      className={
+                        requirementsPassword.upperCase ? style.valid : ""
+                      }
+                    >
+                      1 letra maiúscula
+                    </li>
+                    <li
+                      className={
+                        requirementsPassword.lowerCase ? style.valid : ""
+                      }
+                    >
+                      1 letra minúscula
+                    </li>
+                    <li
+                      className={requirementsPassword.number ? style.valid : ""}
+                    >
+                      1 número
+                    </li>
+                    <li
+                      className={
+                        requirementsPassword.specialCharacter ? style.valid : ""
+                      }
+                    >
+                      1 caracter especial
+                    </li>
+                  </ul>
+                </div>
+              </div>
               <Input
                 type="password"
                 name="confirmPassword"

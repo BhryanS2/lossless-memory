@@ -7,6 +7,8 @@ import { useAuth } from "../hooks/useAuth";
 
 import { Input } from "../components/form/input";
 
+import { Load } from "./Load";
+
 import { userToLogin } from "../@types";
 
 import simbolo from "../assets/icons/Simbolo.svg";
@@ -23,18 +25,26 @@ export function Login() {
   document.title = "Login | lossless";
   const formRef = useRef<FormHandles>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [load, setLoad] = useState(false);
   const { SignIn } = useAuth();
 
   async function handleSubmit(data: handleSubimitProps) {
     setErrorMessage("");
     try {
+      setLoad(true);
       const json = await SignIn(data);
-      if(!json.success) {
+      if (!json.success) {
         setErrorMessage("Email e/ou senha incorretos");
       }
+      setLoad(false);
     } catch (error: any) {
       setErrorMessage("Email e/ou senha incorretos");
+      setLoad(false);
     }
+  }
+
+  if (load) {
+    return <Load />;
   }
 
   return (
@@ -86,7 +96,6 @@ export function Login() {
           <Link to="/change-password" className={style.goOtherPage}>
             Esqueci minha senha
           </Link>
-
         </div>
       </main>
     </section>

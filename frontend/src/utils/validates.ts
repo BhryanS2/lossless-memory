@@ -8,8 +8,8 @@ interface userToSignup extends userToSend {
 type ChangePasswordProps = {
   email: string;
   password: string;
-  confirmPassword: string
-}
+  confirmPassword: string;
+};
 
 export class Validate {
   async signup(signup: userToSignup) {
@@ -26,12 +26,14 @@ export class Validate {
     if (confirmPassword) throw new Error(confirmPassword);
   }
 
-  async changePassword({email, password, confirmPassword}: ChangePasswordProps) {
+  async changePassword({
+    email,
+    password,
+    confirmPassword,
+  }: ChangePasswordProps) {
     this.password(password);
     const confirmPasswordError =
-      password === confirmPassword
-        ? false
-        : "As senhas não conferem";
+      password === confirmPassword ? false : "As senhas não conferem";
     if (confirmPasswordError) throw new Error(confirmPasswordError);
     await this.email(email);
   }

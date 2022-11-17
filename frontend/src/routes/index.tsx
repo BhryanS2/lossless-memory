@@ -1,16 +1,11 @@
 import { ChallengesProvider } from "../contexts/ChallengeContext";
 import { CountdownProvider } from "../contexts/CountdownContext";
 import { useAuth } from "../hooks/useAuth";
-import { Load } from "../pages/Load";
 import { AppRoutes } from "./app";
 import { AuthRoutes } from "./auth";
 
 export function Routes() {
-  const { isAuthenticated, profile, loading } = useAuth();
-
-  if (loading) {
-    return <Load />;
-  }
+  const { isAuthenticated, profile } = useAuth();
 
   if (isAuthenticated && profile?.userProfile) {
     const props = {

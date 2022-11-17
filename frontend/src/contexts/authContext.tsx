@@ -92,8 +92,9 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   async function SignIn({ email, password }: userToLogin) {
     try {
+      setIsLoad(true);
       const json = await SignInApi({ email, password });
-      if (!json.success) return json
+      if (!json.success) return json;
       const { token, user } = json.message;
       BaseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
       await getProfile();
@@ -120,7 +121,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   async function SignUp(data: userToSend): Promise<void> {
     setIsLoad(true);
     const reponse = await SignUpAPi(data);
-
+    console.log(reponse);
     if (!reponse.success) return Promise.reject(reponse.message);
 
     const { email, password } = data;
@@ -139,10 +140,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     setIsLoad(false);
   }
 
-  async function changePassword(data: {
-    email: string;
-    password: string;
-  }) {
+  async function changePassword(data: { email: string; password: string }) {
     return ChangePasswordApi(data.email, data.password);
   }
   return (
